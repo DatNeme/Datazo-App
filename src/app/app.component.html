@@ -1,11 +1,11 @@
 <mat-toolbar class="app-toolbar">
   <a class="logo" [routerLink]="auth.isLoggedIn() ? '/' : null" [style.cursor]="auth.isLoggedIn() ? 'pointer' : 'default'" style="text-decoration: none;">
-    🧠 <span *ngIf="router.url !== '/login'">{{ i18n.currentLang() === 'es' ? 'Datazo' : 'Oddly Specific' }}</span>
+    🧠 <span *ngIf="router.url !== '/login'" class="hide-on-mobile">{{ i18n.currentLang() === 'es' ? 'Datazo' : 'Oddly Specific' }}</span>
   </a>
 
   <!-- Botón de Ranking -->
   <button mat-button class="header-ranking-btn" [routerLink]="'/ranking'" *ngIf="auth.isLoggedIn()">
-    <span class="trophy-icon">🏆</span> Ranking
+    <span class="trophy-icon">🏆</span> <span class="hide-on-mobile">Ranking</span>
   </button>
 
   <span class="spacer"></span>

@@ -124,3 +124,28 @@
 .content-area {
   min-height: calc(100vh - 64px);
 }
+
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none;
+  }
+  
+  .header-ranking-btn {
+    margin-left: 0.5rem;
+    padding: 0 10px;
+    
+    .trophy-icon {
+      margin-right: 0;
+    }
+  }
+
+  .app-toolbar {
+    padding: 0 8px;
+    gap: 2px;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
