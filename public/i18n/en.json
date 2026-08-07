@@ -1,0 +1,41 @@
+{
+  "HOME": {
+    "TITLE": "Trivia Master",
+    "SUBTITLE": "Test your knowledge!",
+    "LOADING": "Loading categories...",
+    "CONFIG": "Configure your game",
+    "CATEGORY": "Category",
+    "ANY_CATEGORY": "Any Category",
+    "DIFFICULTY": "Difficulty",
+    "EASY": "Easy",
+    "MEDIUM": "Medium",
+    "HARD": "Hard",
+    "AMOUNT": "Number of Questions",
+    "START": "START GAME!"
+  },
+  "GAME": {
+    "LOADING": "Finding the best questions...",
+    "QUESTION": "Question",
+    "SCORE": "Score",
+    "GAME_OVER": "Game Over!",
+    "FINAL_SCORE": "Your final score:",
+    "POINTS": "points",
+    "CORRECT_ANSWERS": "You answered {{correct}} out of {{total}} questions correctly.",
+    "PLAY_AGAIN": "Play again"
+  },
+  "AUTH": {
+    "WELCOME_BACK": "Welcome back",
+    "CREATE_ACCOUNT": "Create an account",
+    "CONTINUE_GOOGLE": "Continue with Google",
+    "OR": "or",
+    "EMAIL": "Email address",
+    "PASSWORD": "Password",
+    "LOGIN": "Log in",
+    "REGISTER": "Sign up",
+    "NO_ACCOUNT": "Don't have an account?",
+    "HAVE_ACCOUNT": "Already have an account?",
+    "LOGOUT": "Log out",
+    "GUEST": "Play as Guest"
+  }
+}
+

@@ -1,0 +1,57 @@
+<div class="home-page">
+  <div class="hero text-center mb-4">
+    <h1 class="title">{{ 'HOME.TITLE' | translate }}</h1>
+    <p class="subtitle">{{ 'HOME.SUBTITLE' | translate }}</p>
+  </div>
+
+  <div *ngIf="isLoading()" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>{{ 'HOME.LOADING' | translate }}</p>
+  </div>
+
+  <div *ngIf="!isLoading()" class="glass-card config-card">
+    <h2 class="mb-3 text-center">{{ 'HOME.CONFIG' | translate }}</h2>
+
+    <form class="config-form" (ngSubmit)="startGame()">
+
+      <mat-form-field appearance="outline" class="w-100 mb-2">
+        <mat-label>{{ 'HOME.CATEGORY' | translate }}</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" name="category">
+          <!-- "Cualquier Categoría" es la primera opción pero NO el default (placeholder) -->
+          <mat-option [value]="ANY_CATEGORY">{{ 'HOME.ANY_CATEGORY' | translate }}</mat-option>
+          <mat-option *ngFor="let cat of sortedCategories()" [value]="cat.id">
+            {{ cat.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-2">
+        <mat-label>{{ 'HOME.DIFFICULTY' | translate }}</mat-label>
+        <mat-select [(ngModel)]="selectedDifficulty" name="difficulty">
+          <mat-option value="easy">{{ 'HOME.EASY' | translate }}</mat-option>
+          <mat-option value="medium">{{ 'HOME.MEDIUM' | translate }}</mat-option>
+          <mat-option value="hard">{{ 'HOME.HARD' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>{{ 'HOME.AMOUNT' | translate }}</mat-label>
+        <mat-select [(ngModel)]="questionAmount" name="amount">
+          <mat-option [value]="5">5</mat-option>
+          <mat-option [value]="10">10</mat-option>
+          <mat-option [value]="20">20</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="w-100 start-btn"
+        type="submit"
+        [disabled]="selectedCategory === null">
+        {{ 'HOME.START' | translate }}
+      </button>
+
+    </form>
+  </div>
+</div>

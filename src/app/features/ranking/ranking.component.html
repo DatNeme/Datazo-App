@@ -1,0 +1,139 @@
+<div class="container ranking-page">
+  <div class="header-section text-center mb-4">
+    <h2>🏆 Ranking Global</h2>
+    
+    <div class="filters mt-3">
+      <mat-button-toggle-group [ngModel]="period()" (ngModelChange)="onPeriodChange($event)" name="periodFilter" aria-label="Filtro de tiempo" class="custom-toggle-group">
+        <mat-button-toggle value="daily">Día</mat-button-toggle>
+        <mat-button-toggle value="weekly">Semana</mat-button-toggle>
+        <mat-button-toggle value="monthly">Mes</mat-button-toggle>
+        <mat-button-toggle value="allTime">Todo</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-box mt-4">
+      <div class="search-input-wrapper">
+        <span class="prefix">&#64;</span>
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (keyup.enter)="search()" placeholder="Buscar usuario..." class="search-input">
+        <button *ngIf="searchQuery()" class="clear-btn" (click)="clearSearch()">✕</button>
+      </div>
+      <button mat-flat-button class="search-btn" (click)="search()" [disabled]="isSearching()">
+        <span *ngIf="!isSearching()">Buscar</span>
+        <mat-spinner *ngIf="isSearching()" diameter="20"></mat-spinner>
+      </button>
+    </div>
+    <p class="error-msg" *ngIf="searchError()">{{ searchError() }}</p>
+  </div>
+
+  <div class="content-section" *ngIf="!isLoading()">
+    
+    <!-- Resultados de búsqueda -->
+    <div *ngIf="searchedUsers()" class="search-results-container mb-4">
+      <div *ngFor="let sUser of searchedUsers()" class="search-result glass-card mb-2">
+        <div class="user-row">
+          <div class="rank-badge search-badge">🔍</div>
+          <div class="user-info">
+            <span class="display-name">{{ sUser.displayName }}</span>
+            <span class="username">&#64;{{ sUser.username }}</span>
+          </div>
+          <div class="score-info">
+            <span class="score">{{ getScoreForPeriod(sUser) }}</span>
+            <span class="pts">pts</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-3">
+        <button mat-button (click)="clearSearch()" style="color: var(--text-secondary);">Volver al ranking completo</button>
+      </div>
+    </div>
+
+    <!-- Ranking Normal -->
+    <ng-container *ngIf="!searchedUsers()">
+      
+      <!-- Podio (Solo se muestra si hay al menos 3 y estamos en la primera página) -->
+      <div class="podium-container mb-5" *ngIf="users().length >= 3">
+        
+        <!-- Segundo (Plata) -->
+        <div class="podium-item silver">
+          <div class="avatar">
+            <span class="initials">{{ (users()[1]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+          </div>
+          <div class="podium-bar">
+            <span class="rank">2</span>
+          </div>
+          <div class="info">
+            <span class="name">{{ users()[1]?.displayName }}</span>
+            <span class="score">{{ getScoreForPeriod(users()[1]) }}</span>
+          </div>
+        </div>
+
+        <!-- Primero (Oro) -->
+        <div class="podium-item gold">
+          <div class="avatar">
+            <span class="initials">{{ (users()[0]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+          </div>
+          <div class="podium-bar">
+            <span class="rank">1</span>
+          </div>
+          <div class="info">
+            <span class="name">{{ users()[0]?.displayName }}</span>
+            <span class="score">{{ getScoreForPeriod(users()[0]) }}</span>
+          </div>
+        </div>
+
+        <!-- Tercero (Bronce) -->
+        <div class="podium-item bronze">
+          <div class="avatar">
+            <span class="initials">{{ (users()[2]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+          </div>
+          <div class="podium-bar">
+            <span class="rank">3</span>
+          </div>
+          <div class="info">
+            <span class="name">{{ users()[2]?.displayName }}</span>
+            <span class="score">{{ getScoreForPeriod(users()[2]) }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lista del resto -->
+      <div class="ranking-list">
+        <!-- Si hay podio, mostramos del índice 3 en adelante. Sino (ej. solo hay 2 usuarios), mostramos todo como lista -->
+        <div class="user-row glass-card" *ngFor="let user of users(); let i = index" 
+             [class.d-none]="i < 3 && users().length >= 3">
+          <div class="rank-badge">{{ i + 1 }}</div>
+          <div class="user-info">
+            <span class="display-name">{{ user.displayName }}</span>
+            <span class="username">&#64;{{ user.username }}</span>
+          </div>
+          <div class="score-info">
+            <span class="score">{{ getScoreForPeriod(user) }}</span>
+            <span class="pts">pts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div class="load-more text-center mt-4" *ngIf="hasMore()">
+        <button mat-flat-button class="load-more-btn" (click)="loadRanking()" [disabled]="isLoadingMore()">
+          <span *ngIf="!isLoadingMore()">Cargar más...</span>
+          <mat-spinner *ngIf="isLoadingMore()" diameter="20"></mat-spinner>
+        </button>
+      </div>
+
+      <div class="empty-state text-center" *ngIf="users().length === 0">
+        <p>No hay puntuaciones registradas en este período.</p>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <div class="loading-state text-center mt-5" *ngIf="isLoading()">
+    <mat-spinner diameter="40" class="mx-auto"></mat-spinner>
+    <p class="mt-3">Cargando ranking...</p>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Función auxiliar para verificar si el usuario está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Función auxiliar para verificar si el usuario es dueño del documento
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Reglas para la caché de preguntas: 
+    // Todos los usuarios logueados pueden leer y crear nuevas preguntas en la caché.
+    // No se permite 'update' ni 'delete', así evitamos que alguien edite o corrompa 
+    // respuestas que ya fueron guardadas previamente.
+    match /questions/{hash} {
+      allow read, create: if isAuthenticated();
+    }
+
+    // Colección auxiliar para garantizar usernames únicos
+    match /usernames/{username} {
+      allow read: if isAuthenticated();
+      // Solo el dueño puede crear/borrar su reserva de username
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow update: if false; // Los usernames no se editan, se borran y se crean nuevos
+    }
+
+    // Reglas para perfiles de usuario:
+    match /users/{userId} {
+      // Cualquiera puede leer el ranking/perfiles
+      allow read: if isAuthenticated();
+      
+      // Creación inicial
+      allow create: if isAuthenticated() && isOwner(userId);
+      
+      // Actualización con protección anti-trampas para los puntajes
+      allow update: if isAuthenticated() && isOwner(userId) &&
+        (
+          // El puntaje no puede bajar, y como máximo puede subir 150 puntos por petición
+          request.resource.data.stats.totalScore >= resource.data.stats.totalScore &&
+          request.resource.data.stats.totalScore <= resource.data.stats.totalScore + 150 &&
+          
+          // Las partidas jugadas no pueden bajar, y como máximo pueden subir 1 por petición
+          request.resource.data.stats.gamesPlayed >= resource.data.stats.gamesPlayed &&
+          request.resource.data.stats.gamesPlayed <= resource.data.stats.gamesPlayed + 1
+        );
+      
+      allow delete: if false; // No permitir borrar la cuenta desde el cliente directo
+    }
+    
+    // Por defecto, denegar todo lo demás
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

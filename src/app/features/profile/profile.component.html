@@ -1,0 +1,52 @@
+<div class="container profile-page">
+  <div class="glass-card mb-4" style="position: relative;">
+    <button class="close-btn" [routerLink]="'/'" title="Volver a inicio">✕</button>
+    <h2 class="text-center mb-4">Configuración de Perfil</h2>
+    
+    <div class="profile-header mb-4">
+      <div class="avatar-large">
+        <img *ngIf="auth.photoURL" [src]="auth.photoURL" [alt]="userService.userProfile()?.displayName" class="avatar-img">
+        <span *ngIf="!auth.photoURL" class="avatar-initials">{{ userService.userProfile()?.displayName?.charAt(0)?.toUpperCase() || 'U' }}</span>
+      </div>
+      <div class="stats-summary">
+        <div class="stat-box">
+          <span class="stat-value">{{ userService.userProfile()?.stats?.totalScore || 0 }}</span>
+          <span class="stat-label">Puntos Totales</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-value">{{ userService.userProfile()?.stats?.gamesPlayed || 0 }}</span>
+          <span class="stat-label">Partidas Jugadas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nombre de Usuario (Username) -->
+    <div class="form-group mb-4">
+      <label>Nombre de Usuario (Username)</label>
+      <div class="input-row">
+        <span class="prefix">&#64;</span>
+        <input type="text" [ngModel]="newUsername()" (ngModelChange)="newUsername.set($event)" placeholder="usuario_123" class="custom-input">
+        <button mat-flat-button class="save-btn" [disabled]="isSavingUsername() || newUsername() === userService.userProfile()?.username" (click)="saveUsername()">
+          <span *ngIf="!isSavingUsername()">Guardar</span>
+          <mat-spinner *ngIf="isSavingUsername()" diameter="20"></mat-spinner>
+        </button>
+      </div>
+      <p class="error-msg" *ngIf="usernameError()">{{ usernameError() }}</p>
+      <p class="success-msg" *ngIf="usernameSuccess()">¡Nombre de usuario actualizado!</p>
+    </div>
+
+    <!-- Nombre Público (Display Name) -->
+    <div class="form-group mb-4">
+      <label>Nombre Público</label>
+      <div class="input-row">
+        <input type="text" [ngModel]="newDisplayName()" (ngModelChange)="newDisplayName.set($event)" placeholder="Tu nombre" class="custom-input">
+        <button mat-flat-button class="save-btn" [disabled]="isSavingName() || newDisplayName() === userService.userProfile()?.displayName" (click)="saveName()">
+          <span *ngIf="!isSavingName()">Guardar</span>
+          <mat-spinner *ngIf="isSavingName()" diameter="20"></mat-spinner>
+        </button>
+      </div>
+      <p class="success-msg" *ngIf="nameSuccess()">¡Nombre público actualizado!</p>
+    </div>
+
+  </div>
+</div>
