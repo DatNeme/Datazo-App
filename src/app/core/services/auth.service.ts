@@ -19,6 +19,8 @@ export class AuthService {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         await this.userService.syncUserProfile(user);
+      } else {
+        this.userService.userProfile.set(null);
       }
       this.currentUser.set(user);
     });

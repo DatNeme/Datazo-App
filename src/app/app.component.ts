@@ -1,4 +1,4 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, untracked } from '@angular/core';
 import { RouterOutlet, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -31,7 +31,7 @@ export class AppComponent {
       const profile = this.userService.userProfile();
       if (profile) {
         this.themeService.setDarkMode(profile.preferences.theme === 'dark');
-        if (this.i18n.currentLang() !== profile.preferences.language) {
+        if (untracked(() => this.i18n.currentLang()) !== profile.preferences.language) {
           this.i18n.use(profile.preferences.language);
         }
       }
