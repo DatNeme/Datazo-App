@@ -1,7 +1,7 @@
 {
   "HOME": {
-    "TITLE": "Trivia Master",
-    "SUBTITLE": "¡Pon a prueba tus conocimientos!",
+    "TITLE": "Datazo",
+    "SUBTITLE": "¡Pon a prueba tu conocimiento!",
     "LOADING": "Cargando categorías...",
     "CONFIG": "Configura tu partida",
     "CATEGORY": "Categoría",
@@ -36,5 +36,50 @@
     "HAVE_ACCOUNT": "¿Ya tienes cuenta?",
     "LOGOUT": "Cerrar sesión",
     "GUEST": "Jugar como invitado"
+  },
+  "PROFILE": {
+    "TITLE": "Configuración de Perfil",
+    "TOTAL_SCORE": "Puntos Totales",
+    "GAMES_PLAYED": "Partidas Jugadas",
+    "USERNAME": "Nombre de Usuario (Username)",
+    "USERNAME_PLACEHOLDER": "usuario_123",
+    "SAVE": "Guardar",
+    "USERNAME_SUCCESS": "¡Nombre de usuario actualizado!",
+    "USERNAME_EMPTY": "El nombre de usuario no puede estar vacío",
+    "USERNAME_INVALID": "Solo se permiten letras, números y guiones bajos (_)",
+    "USERNAME_TAKEN": "El nombre de usuario @{{val}} ya está en uso.",
+    "USERNAME_ERROR": "Ocurrió un error al cambiar el nombre de usuario.",
+    "DISPLAY_NAME": "Nombre Público",
+    "DISPLAY_NAME_PLACEHOLDER": "Tu nombre",
+    "DISPLAY_NAME_SUCCESS": "¡Nombre público actualizado!",
+    "API_KEY": "Google Gemini API Key (Opcional, requerida para jugar en Español)",
+    "API_KEY_PLACEHOLDER": "AIzaSy...",
+    "API_KEY_SUCCESS": "¡API Key actualizada!",
+    "API_KEY_HINT": "Tu clave se guarda en tu perfil de forma segura y se utiliza para generar preguntas infinitas en español. Consíguela gratis en aistudio.google.com"
+  },
+  "RANKING": {
+    "TITLE": "🏆 Ranking Global",
+    "DAILY": "Día",
+    "WEEKLY": "Semana",
+    "MONTHLY": "Mes",
+    "ALL_TIME": "Todo",
+    "SEARCH_PLACEHOLDER": "Buscar usuario...",
+    "SEARCH_BTN": "Buscar",
+    "SEARCHING": "Buscando",
+    "NO_USERS_FOUND": "No se encontraron usuarios",
+    "SEARCH_ERROR": "Error al buscar",
+    "BACK_TO_FULL": "Volver al ranking completo",
+    "LOAD_MORE": "Cargar más...",
+    "NO_SCORES": "No hay puntuaciones registradas en este período.",
+    "LOADING": "Cargando ranking..."
+  },
+  "TOOLTIPS": {
+    "SWITCH_LANG_ES": "Cambiar a Español",
+    "SWITCH_LANG_EN": "Switch to English",
+    "LIGHT_MODE": "Modo claro",
+    "DARK_MODE": "Modo oscuro",
+    "PROFILE": "Ir al Perfil",
+    "LOGOUT": "Cerrar sesión",
+    "CLOSE": "Cerrar"
   }
 }

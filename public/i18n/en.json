@@ -1,9 +1,9 @@
 {
   "HOME": {
-    "TITLE": "Trivia Master",
+    "TITLE": "Oddly Specific",
     "SUBTITLE": "Test your knowledge!",
     "LOADING": "Loading categories...",
-    "CONFIG": "Configure your game",
+    "CONFIG": "Setup your game",
     "CATEGORY": "Category",
     "ANY_CATEGORY": "Any Category",
     "DIFFICULTY": "Difficulty",
@@ -36,6 +36,51 @@
     "HAVE_ACCOUNT": "Already have an account?",
     "LOGOUT": "Log out",
     "GUEST": "Play as Guest"
+  },
+  "PROFILE": {
+    "TITLE": "Profile Settings",
+    "TOTAL_SCORE": "Total Score",
+    "GAMES_PLAYED": "Games Played",
+    "USERNAME": "Username",
+    "USERNAME_PLACEHOLDER": "user_123",
+    "SAVE": "Save",
+    "USERNAME_SUCCESS": "Username updated!",
+    "USERNAME_EMPTY": "Username cannot be empty",
+    "USERNAME_INVALID": "Only letters, numbers, and underscores (_) are allowed",
+    "USERNAME_TAKEN": "The username @{{val}} is already in use.",
+    "USERNAME_ERROR": "An error occurred while changing the username.",
+    "DISPLAY_NAME": "Display Name",
+    "DISPLAY_NAME_PLACEHOLDER": "Your name",
+    "DISPLAY_NAME_SUCCESS": "Display name updated!",
+    "API_KEY": "Google Gemini API Key (Optional, required to play in Spanish)",
+    "API_KEY_PLACEHOLDER": "AIzaSy...",
+    "API_KEY_SUCCESS": "API Key updated!",
+    "API_KEY_HINT": "Your key is saved in your profile and used to generate infinite questions in Spanish. Get it for free at aistudio.google.com"
+  },
+  "RANKING": {
+    "TITLE": "🏆 Global Ranking",
+    "DAILY": "Daily",
+    "WEEKLY": "Weekly",
+    "MONTHLY": "Monthly",
+    "ALL_TIME": "All-Time",
+    "SEARCH_PLACEHOLDER": "Search user...",
+    "SEARCH_BTN": "Search",
+    "SEARCHING": "Searching",
+    "NO_USERS_FOUND": "No users found",
+    "SEARCH_ERROR": "Error searching",
+    "BACK_TO_FULL": "Back to full ranking",
+    "LOAD_MORE": "Load more...",
+    "NO_SCORES": "No scores recorded for this period.",
+    "LOADING": "Loading ranking..."
+  },
+  "TOOLTIPS": {
+    "SWITCH_LANG_ES": "Cambiar a Español",
+    "SWITCH_LANG_EN": "Switch to English",
+    "LIGHT_MODE": "Light Mode",
+    "DARK_MODE": "Dark Mode",
+    "PROFILE": "Go to Profile",
+    "LOGOUT": "Log out",
+    "CLOSE": "Close"
   }
 }
 

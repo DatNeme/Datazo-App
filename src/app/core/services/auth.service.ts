@@ -11,12 +11,11 @@ export class AuthService {
   private userService = inject(UserService);
   private googleProvider = new GoogleAuthProvider();
 
-  currentUser = signal<User | null | undefined>(undefined); // undefined = cargando
+  currentUser = signal<User | null | undefined>(undefined);
   isLoggedIn = computed(() => !!this.currentUser());
   isLoading = computed(() => this.currentUser() === undefined);
 
   constructor() {
-    // Escuchar cambios de estado de autenticación
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         await this.userService.syncUserProfile(user);
