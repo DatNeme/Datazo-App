@@ -8,6 +8,7 @@ import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,9 +20,11 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
 export class ProfileComponent implements OnInit {
   userService = inject(UserService);
   auth = inject(AuthService);
+  i18n = inject(I18nService);
 
   newUsername = signal<string>('');
   newDisplayName = signal<string>('');
+  newApiKey = signal<string>('');
   
   isSavingUsername = signal(false);
   usernameError = signal('');
@@ -30,23 +33,26 @@ export class ProfileComponent implements OnInit {
   isSavingName = signal(false);
   nameSuccess = signal(false);
 
+  isSavingApiKey = signal(false);
+  apiKeySuccess = signal(false);
+
   ngOnInit() {
     const profile = this.userService.userProfile();
     if (profile) {
       this.newUsername.set(profile.username || '');
       this.newDisplayName.set(profile.displayName || '');
+      this.newApiKey.set(profile.preferences?.geminiApiKey || '');
     }
   }
 
   async saveUsername() {
     const val = this.newUsername().trim();
     if (!val) {
-      this.usernameError.set('El nombre de usuario no puede estar vacío');
+      this.usernameError.set(this.i18n.translate('PROFILE.USERNAME_EMPTY'));
       return;
     }
-    // Validar caracteres (solo letras, numeros, guiones bajos)
     if (!/^[a-zA-Z0-9_]+$/.test(val)) {
-      this.usernameError.set('Solo se permiten letras, números y guiones bajos (_)');
+      this.usernameError.set(this.i18n.translate('PROFILE.USERNAME_INVALID'));
       return;
     }
 
@@ -63,10 +69,11 @@ export class ProfileComponent implements OnInit {
         this.usernameSuccess.set(true);
         setTimeout(() => this.usernameSuccess.set(false), 3000);
       } else {
-        this.usernameError.set(`El nombre de usuario @${val} ya está en uso.`);
+        const errorMsg = this.i18n.translate('PROFILE.USERNAME_TAKEN').replace('{{val}}', val);
+        this.usernameError.set(errorMsg);
       }
     } catch (e) {
-      this.usernameError.set('Ocurrió un error al cambiar el nombre de usuario.');
+      this.usernameError.set(this.i18n.translate('PROFILE.USERNAME_ERROR'));
     } finally {
       this.isSavingUsername.set(false);
     }
@@ -87,9 +94,27 @@ export class ProfileComponent implements OnInit {
       this.nameSuccess.set(true);
       setTimeout(() => this.nameSuccess.set(false), 3000);
     } catch (e) {
-      // Error manejado silenciosamente o con toast
     } finally {
       this.isSavingName.set(false);
+    }
+  }
+
+  async saveApiKey() {
+    const val = this.newApiKey().trim();
+    
+    const user = this.auth.currentUser();
+    if (!user) return;
+
+    this.isSavingApiKey.set(true);
+    this.apiKeySuccess.set(false);
+
+    try {
+      await this.userService.updatePreferences(user.uid, { geminiApiKey: val });
+      this.apiKeySuccess.set(true);
+      setTimeout(() => this.apiKeySuccess.set(false), 3000);
+    } catch (e) {
+    } finally {
+      this.isSavingApiKey.set(false);
     }
   }
 }

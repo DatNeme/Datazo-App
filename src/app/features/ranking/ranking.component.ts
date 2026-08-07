@@ -52,7 +52,6 @@ export class RankingComponent implements OnInit {
       this.hasMore.set(result.hasMore);
     } catch (e) {
       console.error(e);
-      // Firebase throws index creation error here usually
     } finally {
       this.isLoading.set(false);
       this.isLoadingMore.set(false);
@@ -77,17 +76,16 @@ export class RankingComponent implements OnInit {
     this.searchError.set('');
 
     try {
-      // Remove @ if user typed it
       const searchTerm = q.startsWith('@') ? q.substring(1) : q;
       const users = await this.rankingService.searchUsers(searchTerm);
       if (users.length > 0) {
         this.searchedUsers.set(users);
       } else {
         this.searchedUsers.set([]);
-        this.searchError.set('No se encontraron usuarios');
+        this.searchError.set('RANKING.NO_USERS_FOUND');
       }
     } catch (e) {
-      this.searchError.set('Error al buscar');
+      this.searchError.set('RANKING.SEARCH_ERROR');
     } finally {
       this.isSearching.set(false);
     }

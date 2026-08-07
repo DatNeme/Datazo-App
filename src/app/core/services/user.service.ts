@@ -9,7 +9,6 @@ import { getDailyString, getWeeklyString, getMonthlyString } from '../utils/date
 export class UserService {
   private firestore = inject(Firestore);
   
-  // Guardamos el perfil cargado para acceso síncrono en componentes
   userProfile = signal<UserProfile | null>(null);
 
   /**
@@ -27,8 +26,6 @@ export class UserService {
     if (snapshot.exists()) {
       this.userProfile.set(snapshot.data() as UserProfile);
     } else {
-      // Crear perfil por primera vez
-      // Generamos un username temporal basado en el correo o uid
       const defaultUsername = (user.email ? user.email.split('@')[0] : 'user') + '_' + Math.floor(Math.random() * 10000);
       
       const displayName = user.displayName || defaultUsername;
@@ -36,7 +33,7 @@ export class UserService {
       
       const newProfile: UserProfile = {
         uid: user.uid,
-        username: defaultUsername, // El usuario podrá cambiarlo luego
+        username: defaultUsername,
         displayName,
         photoURL: user.photoURL || undefined,
         searchPrefixes,
@@ -53,7 +50,6 @@ export class UserService {
         }
       };
       
-      // Guardar perfil y reservar el username en un batch
       const batch = writeBatch(this.firestore);
       batch.set(userDocRef, newProfile);
       batch.set(doc(this.firestore, `usernames/${defaultUsername}`), { uid: user.uid });
@@ -74,10 +70,14 @@ export class UserService {
       }));
     }
 
-    await updateDoc(userDocRef, {
-      ...(preferences.theme && { 'preferences.theme': preferences.theme }),
-      ...(preferences.language && { 'preferences.language': preferences.language })
-    });
+    const payload: any = {};
+    if (preferences.theme) payload['preferences.theme'] = preferences.theme;
+    if (preferences.language) payload['preferences.language'] = preferences.language;
+    if (preferences.geminiApiKey !== undefined) payload['preferences.geminiApiKey'] = preferences.geminiApiKey;
+
+    if (Object.keys(payload).length > 0) {
+      await updateDoc(userDocRef, payload);
+    }
   }
 
   /**
@@ -90,20 +90,18 @@ export class UserService {
     const oldUsername = currentProfile.username;
     if (oldUsername === newUsername) return true;
 
-    // Verificar si está libre
     const newUsernameRef = doc(this.firestore, `usernames/${newUsername}`);
     const snap = await getDoc(newUsernameRef);
-    if (snap.exists()) return false; // Ocupado
+    if (snap.exists()) return false;
 
     const newPrefixes = this.generateSearchPrefixes(newUsername, currentProfile.displayName || '');
 
-    // Hacer el cambio en batch
     const batch = writeBatch(this.firestore);
-    batch.set(newUsernameRef, { uid }); // Reservar nuevo
+    batch.set(newUsernameRef, { uid });
     if (oldUsername) {
-      batch.delete(doc(this.firestore, `usernames/${oldUsername}`)); // Liberar viejo
+      batch.delete(doc(this.firestore, `usernames/${oldUsername}`));
     }
-    batch.update(doc(this.firestore, `users/${uid}`), { username: newUsername, searchPrefixes: newPrefixes }); // Actualizar perfil
+    batch.update(doc(this.firestore, `users/${uid}`), { username: newUsername, searchPrefixes: newPrefixes });
     
     await batch.commit();
 
@@ -134,7 +132,6 @@ export class UserService {
       'stats.gamesPlayed': increment(1)
     };
 
-    // Si cambió el día, reseteamos el score sumando el actual, sino incrementamos
     if (profile.stats.daily?.date !== today) {
       updates['stats.daily'] = { date: today, score: score };
     } else {
@@ -155,7 +152,6 @@ export class UserService {
 
     await updateDoc(doc(this.firestore, `users/${uid}`), updates);
     
-    // Recargar perfil completo para mantener sincronicidad en el objeto anidado localmente
     const snap = await getDoc(doc(this.firestore, `users/${uid}`));
     if (snap.exists()) this.userProfile.set(snap.data() as UserProfile);
   }
@@ -177,7 +173,6 @@ export class UserService {
       prefixes.add(d.substring(0, i));
     }
     
-    // También agregar palabras individuales del displayName
     d.split(/\s+/).forEach(word => {
       for (let i = 1; i <= word.length; i++) {
         prefixes.add(word.substring(0, i));

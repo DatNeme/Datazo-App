@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { QuestionProvider } from './core/interfaces/question-provider.interface';
-import { OpenTdbService } from './core/services/open-tdb.service';
+import { QuestionRouterService } from './core/services/question-router.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimationsAsync(),
-    { provide: QuestionProvider, useClass: OpenTdbService },
+    { provide: QuestionProvider, useClass: QuestionRouterService },
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore())
