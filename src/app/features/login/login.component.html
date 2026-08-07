@@ -4,7 +4,7 @@
     <!-- Logo -->
     <div class="brand text-center mb-4">
       <span class="logo-icon">🧠</span>
-      <h1 class="brand-name">Datazo</h1>
+      <h1 class="brand-name">{{ i18n.currentLang() === 'es' ? 'Datazo' : 'Oddly Specific' }}</h1>
       <p class="brand-tagline">{{ mode() === 'login' ? ('AUTH.WELCOME_BACK' | translate) : ('AUTH.CREATE_ACCOUNT' | translate) }}</p>
     </div>
 

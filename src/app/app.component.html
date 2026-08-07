@@ -1,6 +1,6 @@
 <mat-toolbar class="app-toolbar">
   <a class="logo" [routerLink]="auth.isLoggedIn() ? '/' : null" [style.cursor]="auth.isLoggedIn() ? 'pointer' : 'default'" style="text-decoration: none;">
-    🧠 <span *ngIf="router.url !== '/login'">Datazo</span>
+    🧠 <span *ngIf="router.url !== '/login'">{{ i18n.currentLang() === 'es' ? 'Datazo' : 'Oddly Specific' }}</span>
   </a>
 
   <!-- Botón de Ranking -->

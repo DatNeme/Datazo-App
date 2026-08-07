@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 
 type AuthMode = 'login' | 'register';
 
@@ -21,6 +22,7 @@ type AuthMode = 'login' | 'register';
 export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  public i18n = inject(I18nService);
 
   mode = signal<AuthMode>('login');
   isLoading = signal(false);
@@ -28,6 +30,15 @@ export class LoginComponent {
 
   email = '';
   password = '';
+
+  constructor() {
+    // Redirigir al home automáticamente en cuanto el usuario esté logueado y el perfil cargado.
+    effect(() => {
+      if (this.auth.isLoggedIn()) {
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
   toggleMode() {
     this.mode.set(this.mode() === 'login' ? 'register' : 'login');
@@ -38,7 +49,7 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.auth.loginWithGoogle().subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {}, // Handled by effect
       error: (err: any) => {
         this.errorMessage.set(this.parseError(err.code));
         this.isLoading.set(false);
@@ -50,7 +61,7 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.auth.loginAnonymously().subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {}, // Handled by effect
       error: (err: any) => {
         this.errorMessage.set(this.parseError(err.code));
         this.isLoading.set(false);
@@ -68,7 +79,7 @@ export class LoginComponent {
       : this.auth.registerWithEmail(this.email, this.password);
 
     action$.subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {}, // Handled by effect
       error: (err: any) => {
         this.errorMessage.set(this.parseError(err.code));
         this.isLoading.set(false);
