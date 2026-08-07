@@ -1,13 +1,13 @@
 <div class="container ranking-page">
   <div class="header-section text-center mb-4">
-    <h2>🏆 Ranking Global</h2>
+    <h2>{{ 'RANKING.TITLE' | translate }}</h2>
     
     <div class="filters mt-3">
       <mat-button-toggle-group [ngModel]="period()" (ngModelChange)="onPeriodChange($event)" name="periodFilter" aria-label="Filtro de tiempo" class="custom-toggle-group">
-        <mat-button-toggle value="daily">Día</mat-button-toggle>
-        <mat-button-toggle value="weekly">Semana</mat-button-toggle>
-        <mat-button-toggle value="monthly">Mes</mat-button-toggle>
-        <mat-button-toggle value="allTime">Todo</mat-button-toggle>
+        <mat-button-toggle value="daily">{{ 'RANKING.DAILY' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="weekly">{{ 'RANKING.WEEKLY' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="monthly">{{ 'RANKING.MONTHLY' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="allTime">{{ 'RANKING.ALL_TIME' | translate }}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 
@@ -15,15 +15,15 @@
     <div class="search-box mt-4">
       <div class="search-input-wrapper">
         <span class="prefix">&#64;</span>
-        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (keyup.enter)="search()" placeholder="Buscar usuario..." class="search-input">
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (keyup.enter)="search()" [placeholder]="'RANKING.SEARCH_PLACEHOLDER' | translate" class="search-input">
         <button *ngIf="searchQuery()" class="clear-btn" (click)="clearSearch()">✕</button>
       </div>
       <button mat-flat-button class="search-btn" (click)="search()" [disabled]="isSearching()">
-        <span *ngIf="!isSearching()">Buscar</span>
+        <span *ngIf="!isSearching()">{{ 'RANKING.SEARCH_BTN' | translate }}</span>
         <mat-spinner *ngIf="isSearching()" diameter="20"></mat-spinner>
       </button>
     </div>
-    <p class="error-msg" *ngIf="searchError()">{{ searchError() }}</p>
+    <p class="error-msg" *ngIf="searchError()">{{ searchError() | translate }}</p>
   </div>
 
   <div class="content-section" *ngIf="!isLoading()">
@@ -45,7 +45,7 @@
       </div>
       
       <div class="text-center mt-3">
-        <button mat-button (click)="clearSearch()" style="color: var(--text-secondary);">Volver al ranking completo</button>
+        <button mat-button (click)="clearSearch()" style="color: var(--text-secondary);">{{ 'RANKING.BACK_TO_FULL' | translate }}</button>
       </div>
     </div>
 
@@ -58,13 +58,13 @@
         <!-- Segundo (Plata) -->
         <div class="podium-item silver">
           <div class="avatar">
-            <span class="initials">{{ (users()[1]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+            <span class="initials">{{ (users()[1].displayName || 'U').charAt(0).toUpperCase() }}</span>
           </div>
           <div class="podium-bar">
             <span class="rank">2</span>
           </div>
           <div class="info">
-            <span class="name">{{ users()[1]?.displayName }}</span>
+            <span class="name">{{ users()[1].displayName }}</span>
             <span class="score">{{ getScoreForPeriod(users()[1]) }}</span>
           </div>
         </div>
@@ -72,13 +72,13 @@
         <!-- Primero (Oro) -->
         <div class="podium-item gold">
           <div class="avatar">
-            <span class="initials">{{ (users()[0]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+            <span class="initials">{{ (users()[0].displayName || 'U').charAt(0).toUpperCase() }}</span>
           </div>
           <div class="podium-bar">
             <span class="rank">1</span>
           </div>
           <div class="info">
-            <span class="name">{{ users()[0]?.displayName }}</span>
+            <span class="name">{{ users()[0].displayName }}</span>
             <span class="score">{{ getScoreForPeriod(users()[0]) }}</span>
           </div>
         </div>
@@ -86,13 +86,13 @@
         <!-- Tercero (Bronce) -->
         <div class="podium-item bronze">
           <div class="avatar">
-            <span class="initials">{{ (users()[2]?.displayName || 'U').charAt(0).toUpperCase() }}</span>
+            <span class="initials">{{ (users()[2].displayName || 'U').charAt(0).toUpperCase() }}</span>
           </div>
           <div class="podium-bar">
             <span class="rank">3</span>
           </div>
           <div class="info">
-            <span class="name">{{ users()[2]?.displayName }}</span>
+            <span class="name">{{ users()[2].displayName }}</span>
             <span class="score">{{ getScoreForPeriod(users()[2]) }}</span>
           </div>
         </div>
@@ -116,16 +116,15 @@
         </div>
       </div>
 
-      <!-- Paginación -->
       <div class="load-more text-center mt-4" *ngIf="hasMore()">
         <button mat-flat-button class="load-more-btn" (click)="loadRanking()" [disabled]="isLoadingMore()">
-          <span *ngIf="!isLoadingMore()">Cargar más...</span>
+          <span *ngIf="!isLoadingMore()">{{ 'RANKING.LOAD_MORE' | translate }}</span>
           <mat-spinner *ngIf="isLoadingMore()" diameter="20"></mat-spinner>
         </button>
       </div>
 
       <div class="empty-state text-center" *ngIf="users().length === 0">
-        <p>No hay puntuaciones registradas en este período.</p>
+        <p>{{ 'RANKING.NO_SCORES' | translate }}</p>
       </div>
 
     </ng-container>
@@ -134,6 +133,6 @@
 
   <div class="loading-state text-center mt-5" *ngIf="isLoading()">
     <mat-spinner diameter="40" class="mx-auto"></mat-spinner>
-    <p class="mt-3">Cargando ranking...</p>
+    <p class="mt-3">{{ 'RANKING.LOADING' | translate }}</p>
   </div>
 </div>

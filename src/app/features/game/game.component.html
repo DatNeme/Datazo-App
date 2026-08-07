@@ -12,7 +12,7 @@
       <div class="progress-info">
         <span class="badge category-badge">{{ categoryFormatted() }}</span>
         <span class="badge difficulty-badge" [ngClass]="currentQuestion()?.difficulty">
-          {{ currentQuestion()?.difficulty }}
+          {{ difficultyFormatted() }}
         </span>
       </div>
       <div class="score-board">

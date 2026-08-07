@@ -8,13 +8,6 @@ export interface Question {
   correctAnswer: string;
   incorrectAnswers: string[];
 
-  // Metadata de caché
-  /** Texto original en inglés (antes de traducir). Se preserva para el hash y debug. */
-  originalText?: string;
-  /** Si la pregunta ya estaba en español y no requirió traducción. */
-  wasTranslated?: boolean;
-  /** Timestamp de cuando se guardó en el caché de Firestore. */
-  cachedAt?: Date;
 }
 
 export interface Category {

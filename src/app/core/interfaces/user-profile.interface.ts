@@ -1,6 +1,7 @@
 export interface UserPreferences {
   theme: 'dark' | 'light' | 'system';
   language: 'es' | 'en';
+  geminiApiKey?: string;
 }
 
 export interface UserStats {
