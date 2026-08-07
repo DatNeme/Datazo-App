@@ -26,6 +26,8 @@ export class AppComponent {
   userService = inject(UserService);
   snackBar = inject(MatSnackBar);
 
+  private hasWarnedApiKey = false;
+
   constructor() {
     effect(() => {
       const profile = this.userService.userProfile();
@@ -34,6 +36,19 @@ export class AppComponent {
         if (untracked(() => this.i18n.currentLang()) !== profile.preferences.language) {
           this.i18n.use(profile.preferences.language);
         }
+
+        if (profile.preferences.language === 'es' && !profile.preferences.geminiApiKey && !this.hasWarnedApiKey) {
+          this.hasWarnedApiKey = true;
+          this.snackBar.open('⚠️ Recuerda configurar tu Gemini API Key para poder jugar en Español.', 'Ir al Perfil', {
+            duration: 10000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }).onAction().subscribe(() => {
+            this.router.navigate(['/profile']);
+          });
+        }
+      } else {
+        this.hasWarnedApiKey = false;
       }
     });
   }
@@ -60,11 +75,18 @@ export class AppComponent {
 
     if (newLang === 'es') {
       const profile = this.userService.userProfile();
-      if (!profile?.preferences?.geminiApiKey) {
-        this.snackBar.open('Debes configurar tu Gemini API Key en el Perfil para jugar en Español.', 'Ir al Perfil', {
-          duration: 5000,
+      if (!user) {
+        this.snackBar.open('⚠️ Inicia sesión y configura tu API Key para jugar en Español.', 'Cerrar', {
+          duration: 8000,
           horizontalPosition: 'center',
-          verticalPosition: 'bottom'
+          verticalPosition: 'top'
+        });
+      } else if (!profile?.preferences?.geminiApiKey) {
+        this.hasWarnedApiKey = true;
+        this.snackBar.open('⚠️ Recuerda configurar tu Gemini API Key en el Perfil para jugar en Español.', 'Ir al Perfil', {
+          duration: 10000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
         }).onAction().subscribe(() => {
           this.router.navigate(['/profile']);
         });
