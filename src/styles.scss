@@ -70,3 +70,43 @@ html, body {
   transform: translateY(-4px);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
+
+/* Angular Material Overrides for Dark Mode */
+[data-theme='dark'] {
+  .mat-mdc-form-field {
+    --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.38);
+    --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.87);
+    --mdc-outlined-text-field-focus-outline-color: var(--primary-color);
+    --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.6);
+    --mdc-outlined-text-field-hover-label-text-color: rgba(255, 255, 255, 0.87);
+    --mdc-outlined-text-field-focus-label-text-color: var(--primary-color);
+    --mdc-outlined-text-field-input-text-color: #ffffff;
+    --mdc-outlined-text-field-caret-color: var(--primary-color);
+    
+    --mat-select-enabled-trigger-text-color: #ffffff;
+    --mat-select-enabled-arrow-color: rgba(255, 255, 255, 0.6);
+    --mat-select-focused-arrow-color: var(--primary-color);
+  }
+}
+
+/* El select panel se renderiza fuera del app-root, así que targeteamos globalmente bajo html[data-theme='dark'] */
+html[data-theme='dark'] .mat-mdc-select-panel {
+  background-color: var(--surface-color) !important;
+  
+  .mdc-list-item {
+    color: var(--text-primary) !important;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+  }
+
+  .mdc-list-item--selected {
+    color: var(--primary-color) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .mdc-list-item__primary-text {
+    color: inherit; /* Hereda de .mdc-list-item */
+  }
+}
